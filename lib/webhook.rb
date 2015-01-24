@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'oj'
 require 'webhook/settings'
+require 'webhook/status_check'
 require 'publishers'
 require 'pry'
 
@@ -11,6 +12,7 @@ module Webhook
     configure do
       Publishers.configure!
       set :dump_errors, false
+      use Webhook::StatusCheck
     end
 
     post '/stripe' do
