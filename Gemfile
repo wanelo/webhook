@@ -2,8 +2,10 @@ source 'https://rubygems.org'
 
 gem 'sinatra', '~> 1.4.5'
 gem 'lapine', '~> 0.2'
+gem 'unicorn', '~> 4.8'
 
 group :development do
+  gem 'foreman'
   gem 'pry-nav'
 end
 

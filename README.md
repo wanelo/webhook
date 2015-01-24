@@ -34,6 +34,9 @@ bundle exec rake reset
 bundle exec rake
 ```
 
+`rake reset` will symlink missing configuration files to the example files provided in
+`config/`.
+
 ## Configuration
 
 Create a `publishers.yml` in the `config` directory. This file is ignored by git.
@@ -52,3 +55,18 @@ exchange: my.topic
 
 This has a hard assumption that the exchange is a topic exchange configured with
 `durable: true`.
+
+## Deployment
+
+Unicorn can be configured via the following environment variables:
+
+* `WORKER_PROCESSES`
+* `WORKING_DIRECTORY`
+* `UNICORN_TIMEOUT`
+* `UNICORN_PIDFILE`
+* `UNICORN_STDERR`
+* `UNICORN_STDOUT`
+
+```bash
+bundle exec unicorn -c config/unicorn.rb -p %{config/port} config.ru
+```
