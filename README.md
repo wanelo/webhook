@@ -70,3 +70,8 @@ Unicorn can be configured via the following environment variables:
 ```bash
 bundle exec unicorn -c config/unicorn.rb -p %{config/port} config.ru
 ```
+
+## Log rotation
+
+Please use a copy/truncate strategy for log rotation. Webhook does not include any
+facility for reopening file descriptors were the logfiles to be moved and reopened.
