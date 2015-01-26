@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'oj'
 require 'webhook/settings'
+require 'webhook/logging'
 require 'webhook/status_check'
 require 'publishers'
 require 'pry'
@@ -14,6 +15,8 @@ module Webhook
       set :dump_errors, false
       set :root, File.expand_path('../..', __FILE__)
       use Webhook::StatusCheck
+      logfile = ENV['LOGFILE'] || 'log/webhook.log'
+      use Webhook::Logging, logfile
     end
 
     post '/stripe' do
