@@ -11,7 +11,8 @@ module Webhook
   class Web < Sinatra::Base
     configure do
       Publishers.configure!
-      set :dump_errors, false
+      set :raise_errors, false
+      set :show_exceptions, false
       set :root, File.expand_path('../..', __FILE__)
       use Webhook::StatusCheck
       logfile = ENV['LOGFILE'] || 'log/webhook.log'
