@@ -4,7 +4,6 @@ require 'webhook/settings'
 require 'webhook/logging'
 require 'webhook/status_check'
 require 'publishers'
-require 'pry'
 
 Oj.default_options = {:mode => :compat}
 
