@@ -5,12 +5,12 @@
 @stderr_log = ENV['UNICORN_STDERR'] || 'log/webhook.stderr.log'
 @stdout_log = ENV['UNICORN_STDOUT'] || 'log/webhook.stdout.log'
 
-worker_processes @worker_processes
+worker_processes @worker_processes.to_i
 
 working_directory @working_directory
 
 # nuke workers after N seconds instead of 60 seconds (the default)
-timeout @timeout
+timeout @timeout.to_i
 
 pid @pidfile
 
