@@ -1,3 +1,6 @@
+require 'socket'
+require 'publishers/status'
+
 module Webhook
   class StatusCheck
 
@@ -10,10 +13,23 @@ module Webhook
     def call(env)
       path = env['PATH_INFO']
       if path.match(/^\/status_check/)
-        [200, {}, []]
+        begin
+          Publisher::Status.new(status).publish('services.heartbeat')
+          [200, {}, []]
+        rescue StandardError => e
+          [503, {}, []]
+        end
       else
         @app.call env
       end
+    end
+
+    def status
+      {
+        service: 'webhook',
+        hostname: Socket.gethostname,
+        timestamp: Time.now.utc.to_i
+      }
     end
   end
 end

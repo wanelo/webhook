@@ -1,6 +1,7 @@
 require 'webhook/settings'
 require 'publishers/stripe'
 require 'publishers/shopify'
+require 'publishers/status'
 
 module Webhook
   module Publishers
@@ -27,6 +28,7 @@ module Webhook
 
         Publisher::Stripe.exchange exchange
         Publisher::Shopify.exchange exchange
+        Publisher::Status.exchange exchange
       end
     end
   end
