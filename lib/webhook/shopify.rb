@@ -20,11 +20,15 @@ module Webhook
 
     def call(env)
       if env['PATH_INFO'].match(/^\/shopify/)
+        return [401, {}, []] unless env['HTTP_X_SHOPIFY_HMAC_SHA256']
         req = Rack::Request.new(env)
-        hmac_header = env['HTTP_X_SHOPIFY_HMAC_SHA256']
+        hmac_header = env['HTTP_X_SHOPIFY_HMAC_SHA256'].chomp
         digest = OpenSSL::Digest.new('sha256')
-        calculated_hmac = Base64.encode64(OpenSSL::HMAC.digest(digest, app_secret, Oj.dump(req.params))).strip
-        return [401, {}, []] if hmac_header != calculated_hmac
+        calculated_hmac = Base64.encode64(OpenSSL::HMAC.digest(digest, app_secret, req.body.read)).chomp
+        req.body.rewind
+        if hmac_header != calculated_hmac
+          return [401, {}, []]
+        end
       end
 
       @app.call(env)

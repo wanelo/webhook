@@ -31,26 +31,11 @@ module Webhook
       status 200
     end
 
-    %w(
-      /shopify/orders/fulfilled
-      /shopify/orders/cancelled
-      /shopify/refunds/created
-      /shopify/shop/updated
-      /shopify/app/uninstalled
-    ).each do |path|
-      [:get, :post].each do |verb|
-        self.send(verb, path) do
-          webhook = Oj.load(request.body.read)
-          Publisher::Shopify.new(webhook).publish(build_routing_key)
-          status 200
-        end
-      end
-    end
-
-    private
-
-    def build_routing_key
-      request.path_info.split('/')[1..-1].join('.')
+    post %r{shopify/(?<topic>\w*)/(?<action>\w*)} do
+      webhook = Oj.load(request.body.read)
+      routing_key = ['shopify', params['topic'], params['action']].join('.')
+      Publisher::Shopify.new(webhook).publish(routing_key)
+      status 200
     end
   end
 end
