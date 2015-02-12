@@ -40,7 +40,8 @@ module Webhook
     ).each do |path|
       [:get, :post].each do |verb|
         self.send(verb, path) do
-          Publisher::Shopify.new(request.params).publish(build_routing_key)
+          webhook = Oj.load(request.body.read)
+          Publisher::Shopify.new(webhook).publish(build_routing_key)
           status 200
         end
       end
