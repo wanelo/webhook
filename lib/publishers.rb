@@ -16,7 +16,8 @@ module Webhook
           user: publisher_config['connection']['username'],
           password: publisher_config['connection']['password'],
           vhost: publisher_config['connection']['vhost'],
-          ssl: publisher_config['connection']['ssl']
+          ssl: publisher_config['connection']['ssl'],
+          heartbeat: 10
         }
 
         exchange = publisher_config['exchange']
