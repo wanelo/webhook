@@ -32,10 +32,10 @@ module Webhook
     def call(env)
       env['X-REQUEST-UUID'] ||= SecureRandom.uuid
       req = Rack::Request.new(env)
-      logfile.puts Request.new(env['X-REQUEST-UUID'], Time.now.utc.to_s, env['REQUEST_PATH'], req.body.read)
+      logfile.puts Request.new(env['X-REQUEST-UUID'], Time.now.utc.to_s, env['PATH_INFO'], req.body.read)
       req.body.rewind
       @app.call(env).tap do |status, headers, body|
-        logfile.puts Response.new(env['X-REQUEST-UUID'], Time.now.utc.to_s, env['REQUEST_PATH'], status, body)
+        logfile.puts Response.new(env['X-REQUEST-UUID'], Time.now.utc.to_s, env['PATH_INFO'], status, body)
       end
     end
   end
