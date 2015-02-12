@@ -32,9 +32,9 @@ module Webhook
     end
 
     %w(
-      /shopify/order/fulfilled
-      /shopify/order/cancelled
-      /shopify/refund/created
+      /shopify/orders/fulfilled
+      /shopify/orders/cancelled
+      /shopify/refunds/created
       /shopify/shop/updated
       /shopify/app/uninstalled
     ).each do |path|
