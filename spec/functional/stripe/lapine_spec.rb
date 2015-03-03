@@ -21,4 +21,10 @@ RSpec.describe 'stripe endpoint lapine publishing', type: :functional do
     message = queue.messages.pop
     expect(message[1]).to eq({routing_key: 'stripe.omg.lol.moneys'})
   end
+
+  it 'uses the webhook type as the routing key' do
+    post '/stripe', '{"stuff":"awesome","type":"charge.dispute.created"}'
+    message = queue.messages.pop
+    expect(message[1]).to eq({routing_key: 'stripe.charge.dispute.created'})
+  end
 end
