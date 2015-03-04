@@ -3,6 +3,7 @@ require 'sinatra/namespace'
 require 'oj'
 require 'webhook/settings'
 require 'webhook/logging'
+require 'webhook/metrics'
 require 'webhook/status_check'
 require 'webhook/shopify'
 require 'publishers'
@@ -28,6 +29,7 @@ module Webhook
       webhook = Oj.load(request.body.read)
       routing_key = ['stripe', webhook['type']].compact.join('.')
       Publisher::Stripe.new(webhook).publish(routing_key)
+      Webhook::Metrics.instance.increment(routing_key)
       status 200
     end
 
@@ -35,6 +37,7 @@ module Webhook
       webhook = Oj.load(request.body.read)
       routing_key = ['shopify', params['topic'], params['action']].join('.')
       Publisher::Shopify.new(webhook).publish(routing_key)
+      Webhook::Metrics.instance.increment(routing_key)
       status 200
     end
   end

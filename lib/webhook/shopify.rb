@@ -1,5 +1,6 @@
 require 'base64'
 require 'openssl'
+require 'webhook/metrics'
 
 module Webhook
   # Shopify webhook middleware that returns 401 if HMAC digest authentication is
@@ -20,13 +21,19 @@ module Webhook
 
     def call(env)
       if env['PATH_INFO'].match(/^\/shopify/)
-        return [401, {}, []] unless env['HTTP_X_SHOPIFY_HMAC_SHA256']
+        unless env['HTTP_X_SHOPIFY_HMAC_SHA256']
+          Webhook::Metrics.instance.increment('shopify.hmac_missing')
+          return [401, {}, []]
+        end
+
         req = Rack::Request.new(env)
         hmac_header = env['HTTP_X_SHOPIFY_HMAC_SHA256'].chomp
         digest = OpenSSL::Digest.new('sha256')
         calculated_hmac = Base64.encode64(OpenSSL::HMAC.digest(digest, app_secret, req.body.read)).chomp
         req.body.rewind
+
         if hmac_header != calculated_hmac
+          Webhook::Metrics.instance.increment('shopify.hmac_mismatch')
           return [401, {}, []]
         end
       end
