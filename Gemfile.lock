@@ -6,7 +6,7 @@ GEM
       amq-protocol (>= 1.9.2)
       eventmachine
     backports (3.6.4)
-    bunny (1.6.3)
+    bunny (1.7.0)
       amq-protocol (>= 1.9.2)
     capybara (2.3.0)
       mime-types (>= 1.16)
@@ -19,7 +19,7 @@ GEM
     coderay (1.1.0)
     diff-lcs (1.2.5)
     dotenv (0.10.0)
-    eventmachine (1.0.4)
+    eventmachine (1.0.7)
     ffi (1.9.6)
     foreman (0.63.0)
       dotenv (>= 0.7)
@@ -41,7 +41,7 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     hitimes (1.2.2)
     kgio (2.9.3)
-    lapine (0.2.9)
+    lapine (1.1.2)
       amqp
       bunny
       mixlib-cli
@@ -63,7 +63,7 @@ GEM
     notiffany (0.0.3)
       nenv (~> 0.1)
       shellany (~> 0.0)
-    oj (2.11.4)
+    oj (2.11.5)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -124,7 +124,7 @@ DEPENDENCIES
   capybara
   foreman
   guard-rspec
-  lapine (~> 0.2)
+  lapine (~> 1.0)
   pry-nav
   rake
   rspec (~> 3.1)
