@@ -1,19 +1,18 @@
 require 'sinatra/base'
-require 'sinatra/namespace'
 require 'oj'
 require 'webhook/settings'
-require 'webhook/logging'
 require 'webhook/metrics'
 require 'webhook/status_check'
 require 'webhook/shopify'
+require 'loginator/middleware/sinatra'
 require 'publishers'
+require 'multi_json'
 
+MultiJson.use Oj
 Oj.default_options = {:mode => :compat}
 
 module Webhook
   class Web < Sinatra::Base
-    register Sinatra::Namespace
-
     configure do
       Publishers.configure!
       set :raise_errors, false
@@ -21,7 +20,9 @@ module Webhook
       set :root, File.expand_path('../..', __FILE__)
       use Webhook::StatusCheck
       logfile = ENV['LOGFILE'] || 'log/webhook.log'
-      use Webhook::Logging, logfile
+      log = File.open(logfile, 'a')
+      log.sync = true
+      use Loginator::Middleware::Sinatra, log
       use Webhook::Shopify
     end
 

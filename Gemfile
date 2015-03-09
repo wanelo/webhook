@@ -6,6 +6,7 @@ gem 'lapine', '~> 1.0'
 gem 'statsd-ruby', require: 'statsd'
 gem 'unicorn', '~> 4.8'
 gem 'newrelic_rpm'
+gem 'loginator', '~> 0.1.2'
 
 group :development do
   gem 'foreman'
