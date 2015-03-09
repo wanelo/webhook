@@ -51,6 +51,8 @@ GEM
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    loginator (0.1.2)
+      multi_json (~> 1.10.1)
     lumberjack (1.0.9)
     method_source (0.8.2)
     mime-types (2.0)
@@ -126,6 +128,7 @@ DEPENDENCIES
   foreman
   guard-rspec
   lapine (~> 1.0)
+  loginator (~> 0.1.2)
   pry-nav
   rake
   rspec (~> 3.1)
