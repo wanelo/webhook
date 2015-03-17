@@ -33,6 +33,14 @@ module Webhook
       status 200
     end
 
+    post %r{shopify/(?<wanelo_store_id>\w*)/(?<topic>\w*)/(?<action>\w*)} do
+      webhook = Oj.load(request.body.read)
+      routing_key = ['shopify', params['topic'], params['action']].join('.')
+      webhook['wanelo_store_id'] = params['wanelo_store_id']
+      Publisher::Shopify.new(webhook).publish(routing_key)
+      status 200
+    end
+
     post %r{shopify/(?<topic>\w*)/(?<action>\w*)} do
       webhook = Oj.load(request.body.read)
       routing_key = ['shopify', params['topic'], params['action']].join('.')
@@ -42,4 +50,3 @@ module Webhook
     end
   end
 end
-

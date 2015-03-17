@@ -18,6 +18,13 @@ RSpec.describe 'status check routing', type: :functional do
     }
   end
 
+  context 'with store id in path' do
+    it 'includes  store id in payload' do
+      post '/shopify/1/orders/fulfilled', body, rack_env(body_hmac)
+      expect(last_response.status).to eq(200)
+    end
+  end
+
   context 'with HTTP_X_SHOPIFY_HMAC_SHA256 header' do
     context 'when submitted hmac and calculated hmac are the same' do
       it 'continues' do
