@@ -36,4 +36,12 @@ RSpec.describe 'shopify endpoint lapine publishing', type: :functional do
     message = queue.messages.pop
     expect(message[1]).to eq({routing_key: 'shopify.orders.fulfilled'})
   end
+
+  context 'with store id in path' do
+    it 'includes the store id in the message' do
+      post '/shopify/1/orders/fulfilled', body, rack_env(body_hmac)
+      message = queue.messages.pop
+      expect(Oj.load(message[0])['wanelo_store_id'].to_i).to eq(1)
+    end
+  end
 end
