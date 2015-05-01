@@ -39,6 +39,7 @@ module Webhook
       routing_key = ['shopify', params['topic'], params['action']].join('.')
       webhook['wanelo_store_id'] = params['wanelo_store_id']
       Publisher::Shopify.new(webhook).publish(routing_key)
+      Webhook::Metrics.instance.increment(routing_key)
       status 200
     end
 
