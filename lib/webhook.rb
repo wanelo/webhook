@@ -28,7 +28,7 @@ module Webhook
 
     post '/stripe' do
       webhook = Oj.load(request.body.read)
-      routing_key = ['stripe', webhook['type']].compact.join('.')
+      routing_key = ['stripe', webhook['type']].compact.join('.').force_encoding('UTF-8')
       Publisher::Stripe.new(webhook).publish(routing_key)
       Webhook::Metrics.instance.increment(routing_key)
       status 200
@@ -36,7 +36,7 @@ module Webhook
 
     post %r{shopify/(?<wanelo_store_id>\w*)/(?<topic>\w*)/(?<action>\w*)} do
       webhook = Oj.load(request.body.read)
-      routing_key = ['shopify', params['topic'], params['action']].join('.')
+      routing_key = ['shopify', params['topic'], params['action']].join('.').force_encoding('UTF-8')
       webhook['wanelo_store_id'] = params['wanelo_store_id']
       Publisher::Shopify.new(webhook).publish(routing_key)
       Webhook::Metrics.instance.increment(routing_key)
@@ -45,7 +45,7 @@ module Webhook
 
     post %r{shopify/(?<topic>\w*)/(?<action>\w*)} do
       webhook = Oj.load(request.body.read)
-      routing_key = ['shopify', params['topic'], params['action']].join('.')
+      routing_key = ['shopify', params['topic'], params['action']].join('.').force_encoding('UTF-8')
       Publisher::Shopify.new(webhook).publish(routing_key)
       Webhook::Metrics.instance.increment(routing_key)
       status 200
