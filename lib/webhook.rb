@@ -50,5 +50,9 @@ module Webhook
       Webhook::Metrics.instance.increment(routing_key)
       status 200
     end
+
+    get '/status' do
+      '♥'
+    end
   end
 end
