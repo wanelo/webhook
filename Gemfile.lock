@@ -41,7 +41,7 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     hitimes (1.2.2)
     kgio (2.9.3)
-    lapine (1.99.0)
+    lapine (2.0.0)
       amqp
       bunny
       mixlib-cli
@@ -128,7 +128,7 @@ DEPENDENCIES
   capybara
   foreman
   guard-rspec
-  lapine (~> 1.0)
+  lapine (~> 2.0)
   loginator (~> 0.1.2)
   newrelic_rpm
   pry-nav
