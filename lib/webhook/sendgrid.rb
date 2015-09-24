@@ -30,8 +30,8 @@ module Webhook
     private
 
     def authorized?(env)
-      @auth ||= Rack::Auth::Basic::Request.new(env)
-      @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == [username, password]
+      auth = Rack::Auth::Basic::Request.new(env)
+      auth.provided? && auth.basic? && auth.credentials && auth.credentials == [username, password]
     end
 
     def password
