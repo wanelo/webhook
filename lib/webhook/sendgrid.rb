@@ -19,7 +19,7 @@ module Webhook
           return [
             401,
             {'WWW-Authenticate' => %(Basic realm="Restricted Area")},
-            "Oops... we need your login name & password\n"
+            ["Oops... we need your login name & password\n"]
           ]
         end
       end
