@@ -1,6 +1,7 @@
 require 'webhook/settings'
 require 'publishers/stripe'
 require 'publishers/shopify'
+require 'publishers/sendgrid'
 require 'publishers/status'
 
 module Webhook
@@ -27,6 +28,7 @@ module Webhook
           type: 'topic'
         }
 
+        Publisher::Sendgrid.exchange exchange
         Publisher::Stripe.exchange exchange
         Publisher::Shopify.exchange exchange
         Publisher::Status.exchange exchange

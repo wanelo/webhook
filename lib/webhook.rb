@@ -51,6 +51,14 @@ module Webhook
       status 200
     end
 
+    post '/sendgrid' do
+      webhook = Oj.load(request.body.read)
+      routing_key = 'sendgrid'
+      Publisher::Sendgrid.new(webhook).publish(routing_key)
+      Webhook::Metrics.instance.increment(routing_key)
+      status 200
+    end
+
     get '/status' do
       '♥'
     end
