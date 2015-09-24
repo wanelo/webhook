@@ -4,6 +4,7 @@ require 'webhook/settings'
 require 'webhook/metrics'
 require 'webhook/status_check'
 require 'webhook/shopify'
+require 'webhook/sendgrid'
 require 'loginator/middleware/sinatra'
 require 'publishers'
 require 'multi_json'
@@ -24,6 +25,7 @@ module Webhook
       log.sync = true
       use Loginator::Middleware::Sinatra, log
       use Webhook::Shopify
+      use Webhook::Sendgrid
     end
 
     post '/stripe' do

@@ -4,6 +4,14 @@ RSpec.describe 'sendgrid endpoint lapine publishing', type: :functional do
   let(:app) { Webhook::Web }
   let(:exchange) { Lapine.find_exchange('my.topic') }
   let!(:queue) { exchange.channel.queue.bind(exchange) }
+  let(:username) { 'foo' }
+  let(:password) { 'bar' }
+
+  before {
+    allow_any_instance_of(Webhook::Sendgrid).to receive(:username) { username }
+    allow_any_instance_of(Webhook::Sendgrid).to receive(:password) { password }
+    basic_authorize(username, password)
+  }
 
   it 'publishes a message to lapine' do
     post '/sendgrid', '{"stuff":"awesome"}'
