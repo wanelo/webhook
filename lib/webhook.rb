@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'oj'
 require 'webhook/settings'
+require 'webhook/log_headers'
 require 'webhook/metrics'
 require 'webhook/status_check'
 require 'webhook/shopify'
