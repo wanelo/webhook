@@ -54,6 +54,14 @@ module Webhook
       status 200
     end
 
+    post '/easypost' do
+      webhook = Oj.load(request.body.read)
+      routing_key = ['easypost',webhook['description']].compact.join('.').force_encoding('UTF-8')
+      Publisher::EasyPost.new(webhook).publish(routing_key)
+      Webhook::Metrics.instance.increment(routing_key)
+      status 200
+    end
+
     post '/sendgrid' do
       webhook = Oj.load(request.body.read)
       routing_key = 'sendgrid'

@@ -2,6 +2,7 @@ require 'webhook/settings'
 require 'publishers/stripe'
 require 'publishers/shopify'
 require 'publishers/sendgrid'
+require 'publishers/easy_post'
 require 'publishers/status'
 
 module Webhook
@@ -31,6 +32,7 @@ module Webhook
         Publisher::Sendgrid.exchange exchange
         Publisher::Stripe.exchange exchange
         Publisher::Shopify.exchange exchange
+        Publisher::EasyPost.exchange exchange
         Publisher::Status.exchange exchange
       end
     end
