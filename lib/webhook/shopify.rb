@@ -28,11 +28,11 @@ module Webhook
 
         req = Rack::Request.new(env)
         hmac_header = env['HTTP_X_SHOPIFY_HMAC_SHA256'].chomp
-        digest = OpenSSL::Digest.new('sha256')
-        calculated_hmac = Base64.encode64(OpenSSL::HMAC.digest(digest, app_secret, req.body.read)).chomp
+
+        matches = matching_hmac(hmac_header, req)
         req.body.rewind
 
-        if hmac_header != calculated_hmac
+        unless matches
           Webhook::Metrics.instance.increment('shopify.hmac_mismatch')
           return [401, {}, []]
         end
@@ -43,9 +43,26 @@ module Webhook
 
     private
 
-    # possess env variables SHOPIFY_APP_API_KEY and SHOPIFY_APP_SECRET
+    def matching_hmac(header, req)
+      digest = OpenSSL::Digest.new('sha256')
+      body = req.body.read
+      [app_secret, channel_dev_app_secret, channel_app_secret].find do |key|
+        key && (Base64.encode64(OpenSSL::HMAC.digest(digest, key, body)).chomp == header)
+      end != nil
+    end
+
     def app_secret
-      @app_secret ||= ENV['SHOPIFY_APP_SECRET']
+      ENV['SHOPIFY_APP_SECRET']
+    end
+
+    # The development app will need production webhooks for testing
+    def channel_dev_app_secret
+      ENV['SHOPIFY_CHANNEL_DEV_APP_SECRET']
+    end
+
+    # The development app will need production webhooks for testing
+    def channel_app_secret
+      ENV['SHOPIFY_CHANNEL_APP_SECRET']
     end
 
   end
