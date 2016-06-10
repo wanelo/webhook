@@ -6,6 +6,7 @@ require 'webhook/metrics'
 require 'webhook/status_check'
 require 'webhook/shopify'
 require 'webhook/sendgrid'
+require 'webhook/sift_science'
 require 'loginator/middleware/sinatra'
 require 'publishers'
 require 'multi_json'
@@ -27,6 +28,7 @@ module Webhook
       use Loginator::Middleware::Sinatra, log
       use Webhook::Shopify
       use Webhook::Sendgrid
+      use Webhook::SiftScience
     end
 
     post '/stripe' do
@@ -67,6 +69,20 @@ module Webhook
       routing_key = 'sendgrid'
       Publisher::Sendgrid.new(webhook).publish(routing_key)
       Webhook::Metrics.instance.increment(routing_key)
+      status 200
+    end
+
+    post '/sift_science' do
+      puts "CCCCC"
+
+
+      webhook = Oj.load(request.body.read)
+
+
+      puts webhook.inspect
+
+
+      # TODO:: Lets look at the payload and figure out a pattern
       status 200
     end
 
