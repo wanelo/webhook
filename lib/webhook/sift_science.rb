@@ -10,8 +10,6 @@ module Webhook
     end
 
     def call(env)
-      puts "DDDDD"
-
       if env['PATH_INFO'].match(/^\/sift_science/)
         unless authorized?(env)
           return [
@@ -37,10 +35,6 @@ module Webhook
 
     def secret_key
       ENV['SIFT_SCIENCE_APP_SECRET']
-    end
-
-    def hash_function
-      'sha1'
     end
   end
 end

@@ -73,16 +73,10 @@ module Webhook
     end
 
     post '/sift_science' do
-      puts "CCCCC"
-
-
       webhook = Oj.load(request.body.read)
-
-
-      puts webhook.inspect
-
-
-      # TODO:: Lets look at the payload and figure out a pattern
+      routing_key = ['sift_science.action',webhook['action']['id']].compact.join('.').force_encoding('UTF-8')
+      Publisher::SiftScience.new(webhook).publish(routing_key)
+      Webhook::Metrics.instance.increment(routing_key)
       status 200
     end
 
