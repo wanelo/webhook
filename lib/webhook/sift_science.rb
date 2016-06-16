@@ -17,17 +17,18 @@ module Webhook
           ]
         end
       end
-
       @app.call(env)
     end
 
     private
 
     def authorized?(env)
+      return true if ENV['SIFT_SCIENCE_VALIDATION_DISABLED']
+
       req = Rack::Request.new(env)
 
-      digest  = OpenSSL::Digest.new('sha1')
-      calculated_hmac = OpenSSL::HMAC.hexdigest(digest, secret_key , req.body.read)
+      digest = OpenSSL::Digest.new('sha1')
+      calculated_hmac = OpenSSL::HMAC.hexdigest(digest, secret_key, req.body.read)
       env['X-Sift-Science-Signature'] == "sha1=#{calculated_hmac}"
     end
 
