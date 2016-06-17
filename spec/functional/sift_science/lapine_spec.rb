@@ -4,7 +4,7 @@ RSpec.describe 'sift_science endpoint lapine publishing', type: :functional do
   let!(:queue) { exchange.channel.queue.bind(exchange) }
 
   let(:body) { '{"id":"e2260152130a5844d9b38e2261eaea827ffffeaaca739bff:ban_user_1","action":{"id":"ban_user_1","href":"https://api3.siftscience.com/v3/accounts/52dee51afe6b7ce6b0000047/actions/ban_user_1"},"entity":{"id":"19884820","href":"https://api3.siftscience.com/v3/accounts/52dee51afe6b7ce6b0000047/users/19884820"},"time":1465482241024,"triggers":[{"type":"formula","trigger":{"id":"575076cee4b094a673cf3a3c","href":"https://api3.siftscience.com/v3/accounts/52dee51afe6b7ce6b0000047/formulas/575076cee4b094a673cf3a3c"}}]}' }
-  let(:headers) { {'X-Sift-Science-Signature' => 'sha1=f6ad932ba8057d11fe1b6c3e8e4cf8b1b6770139'} }
+  let(:headers) { {'HTTP_X_SIFT_SCIENCE_SIGNATURE' => 'sha1=f6ad932ba8057d11fe1b6c3e8e4cf8b1b6770139'} }
   let(:secret) { 'abcdefghijkl1234' }
 
   before do

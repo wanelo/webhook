@@ -22,6 +22,8 @@ module Webhook
       set :show_exceptions, false
       set :root, File.expand_path('../..', __FILE__)
       use Webhook::StatusCheck
+
+
       logfile = ENV['LOGFILE'] || 'log/webhook.log'
       log = File.open(logfile, 'a')
       log.sync = true
@@ -58,7 +60,7 @@ module Webhook
 
     post '/easypost' do
       webhook = Oj.load(request.body.read)
-      routing_key = ['easypost',webhook['description']].compact.join('.').force_encoding('UTF-8')
+      routing_key = ['easypost', webhook['description']].compact.join('.').force_encoding('UTF-8')
       Publisher::EasyPost.new(webhook).publish(routing_key)
       Webhook::Metrics.instance.increment(routing_key)
       status 200
@@ -74,7 +76,7 @@ module Webhook
 
     post '/sift_science' do
       webhook = Oj.load(request.body.read)
-      routing_key = ['sift_science.action',webhook['action']['id']].compact.join('.').force_encoding('UTF-8')
+      routing_key = ['sift_science.action', webhook['action']['id']].compact.join('.').force_encoding('UTF-8')
       Publisher::SiftScience.new(webhook).publish(routing_key)
       Webhook::Metrics.instance.increment(routing_key)
       status 200
