@@ -9,8 +9,8 @@ RSpec.describe 'sift science routing', type: :functional do
   context 'with secret enabled' do
 
     before do
-      expect(ENV).to receive(:[]).with ('SIFT_SCIENCE_VALIDATION_DISABLED') { nil }
-      expect(ENV).to receive(:[]).with ('SIFT_SCIENCE_APP_SECRET') { secret }
+      expect(ENV).to receive(:[]).with('SIFT_SCIENCE_VALIDATION_DISABLED') { nil }
+      expect(ENV).to receive(:[]).with('SIFT_SCIENCE_APP_SECRET').at_least(:once) { secret }
     end
 
     context 'authorization' do

@@ -10,10 +10,11 @@ module Webhook
     end
 
     def call(env)
+
       if env['PATH_INFO'].match(/^\/sift_science/)
         unless authorized?(env)
           return [
-            401, {}, ["The provided checksum didn't match\n"]
+            401, {}, ["The provided checksum #{provided_checksum(env)} didn't match #{expected_checksum(env)}\n"]
           ]
         end
       end
@@ -24,15 +25,23 @@ module Webhook
 
     def authorized?(env)
       return true if ENV['SIFT_SCIENCE_VALIDATION_DISABLED']
+      provided_checksum(env) == expected_checksum(env)
+    end
 
+    private
+
+    def provided_checksum(env)
+      env['X-Sift-Science-Signature']
+    end
+
+    def expected_checksum(env)
       req = Rack::Request.new(env)
 
       digest = OpenSSL::Digest.new('sha1')
       calculated_hmac = OpenSSL::HMAC.hexdigest(digest, secret_key, req.body.read)
-      env['X-Sift-Science-Signature'] == "sha1=#{calculated_hmac}"
+      req.body.rewind
+      "sha1=#{calculated_hmac}"
     end
-
-    private
 
     def secret_key
       ENV['SIFT_SCIENCE_APP_SECRET']
