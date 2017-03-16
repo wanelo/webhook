@@ -4,6 +4,7 @@ require 'publishers/shopify'
 require 'publishers/sift_science'
 require 'publishers/sendgrid'
 require 'publishers/easy_post'
+require 'publishers/branch'
 require 'publishers/status'
 
 module Webhook
@@ -35,6 +36,7 @@ module Webhook
         Publisher::Stripe.exchange exchange
         Publisher::Shopify.exchange exchange
         Publisher::EasyPost.exchange exchange
+        Publisher::Branch.exchange exchange
         Publisher::Status.exchange exchange
       end
     end

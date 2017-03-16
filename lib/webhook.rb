@@ -82,6 +82,16 @@ module Webhook
       status 200
     end
 
+    post '/branch/events/:event' do
+      if ['install'].include?(params[:event].to_s)
+        webhook = Oj.load(request.body.read)
+        routing_key = ['branch.events', params[:event]].join('.').force_encoding('UTF-8')
+        Publisher::Branch.new(webhook).publish(routing_key)
+        Webhook::Metrics.instance.increment(routing_key)
+      end
+      status 200
+    end
+
     get '/status' do
       '♥'
     end
