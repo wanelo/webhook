@@ -11,6 +11,7 @@ gem 'loginator', '~> 0.1.2'
 group :development do
   gem 'foreman'
   gem 'pry-nav'
+  gem 'capistrano', '3.8.0'
 end
 
 group :test do
