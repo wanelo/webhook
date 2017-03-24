@@ -12,6 +12,7 @@ group :development do
   gem 'foreman'
   gem 'pry-nav'
   gem 'capistrano', '3.8.0'
+  gem 'capistrano-bundler'
 end
 
 group :test do
