@@ -74,9 +74,9 @@ module Webhook
       status 200
     end
 
-    post '/sift_science' do
+    post '/sift_science/ban_user' do
       webhook = Oj.load(request.body.read)
-      routing_key = ['sift_science.action', webhook['action']['id']].compact.join('.').force_encoding('UTF-8')
+      routing_key = 'sift_science.action.ban_user'
       Publisher::SiftScience.new(webhook).publish(routing_key)
       Webhook::Metrics.instance.increment(routing_key)
       status 200
