@@ -83,7 +83,7 @@ module Webhook
     end
 
     post '/branch/events/:event' do
-      if ['install'].include?(params[:event].to_s)
+      if ['install', 'shipment'].include?(params[:event].to_s)
         webhook = Oj.load(request.body.read)
         routing_key = ['branch.events', params[:event]].join('.').force_encoding('UTF-8')
         Publisher::Branch.new(webhook).publish(routing_key)

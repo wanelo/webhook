@@ -9,14 +9,15 @@ RSpec.describe 'sift science routing', type: :functional do
   context 'with secret enabled' do
 
     before do
-      expect(ENV).to receive(:[]).with('SIFT_SCIENCE_VALIDATION_DISABLED') { nil }
-      expect(ENV).to receive(:[]).with('SIFT_SCIENCE_APP_SECRET').at_least(:once) { secret }
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('SIFT_SCIENCE_VALIDATION_DISABLED') { nil }
+      allow(ENV).to receive(:[]).with('SIFT_SCIENCE_APP_SECRET') { secret }
     end
 
     context 'authorization' do
       context 'with a valid sha1 hmac' do
         it 'returns http 200' do
-          post '/sift_science', body, headers
+          post '/sift_science/ban_user', body, headers
           expect(last_response.status).to eq(200)
         end
       end
@@ -24,14 +25,14 @@ RSpec.describe 'sift science routing', type: :functional do
       context 'with and invalid sha1 hmac' do
         let(:invalid_headers) { {'HTTP_X_SIFT_SCIENCE_SIGNATURE' => 'sha1=1234566789012345678901234567890123456780'} }
         it 'returns http 401' do
-          post '/sift_science', body, invalid_headers
+          post '/sift_science/ban_user', body, invalid_headers
           expect(last_response.status).to eq(401)
         end
       end
 
       context 'with no sha1 hmac' do
         it 'returns http 401' do
-          post '/sift_science', body, {}
+          post '/sift_science/ban_user', body, {}
           expect(last_response.status).to eq(401)
         end
       end
@@ -48,7 +49,7 @@ RSpec.describe 'sift science routing', type: :functional do
     context 'authorization' do
       context 'with a valid sha1 hmac' do
         it 'returns http 200' do
-          post '/sift_science', body, headers
+          post '/sift_science/ban_user', body, headers
           expect(last_response.status).to eq(200)
         end
       end
@@ -56,14 +57,14 @@ RSpec.describe 'sift science routing', type: :functional do
       context 'with and invalid sha1 hmac' do
         let(:invalid_headers) { {'HTTP_X_SIFT_SCIENCE_SIGNATURE' => 'sha1=1234566789012345678901234567890123456780'} }
         it 'returns http 401' do
-          post '/sift_science', body, invalid_headers
+          post '/sift_science/ban_user', body, invalid_headers
           expect(last_response.status).to eq(200)
         end
       end
 
       context 'with no sha1 hmac' do
         it 'returns http 401' do
-          post '/sift_science', body, {}
+          post '/sift_science/ban_user', body, {}
           expect(last_response.status).to eq(200)
         end
       end

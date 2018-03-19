@@ -13,19 +13,13 @@ RSpec.describe 'sift_science endpoint lapine publishing', type: :functional do
   end
 
   it 'publishes a message to lapine' do
-    post '/sift_science', body, headers
+    post '/sift_science/ban_user', body, headers
     expect(queue.message_count).to eq(1)
   end
 
   it 'uses the posted body as message content' do
-    post '/sift_science', body, headers
+    post '/sift_science/ban_user', body, headers
     message = queue.messages.pop
     expect(message[0]).to eq(body)
-  end
-
-  it 'uses the webhook description as the routing key' do
-    post '/sift_science', body, headers
-    message = queue.messages.pop
-    expect(message[1]).to eq({routing_key: 'sift_science.action.ban_user_1'})
   end
 end
