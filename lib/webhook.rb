@@ -92,6 +92,14 @@ module Webhook
       status 200
     end
 
+    post '/desk/events/outbound_email' do
+      webhook = Oj.load(request.body.read)
+      routing_key = 'desk.events.outbound_email'
+      Publisher::Desk.new(webhook).publish(routing_key)
+      Webhook::Metrics.instance.increment(routing_key)
+      status 200
+    end
+
     get '/status' do
       '♥'
     end
